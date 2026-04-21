@@ -16,8 +16,7 @@ export class UserService {
       });
 
       // eslint-disable-next-line no-unused-vars
-      const { password, updatedAt, deletedAt, ...safeUser } =
-        newUser.toJSON();
+      const { password, updatedAt, deletedAt, ...safeUser } = newUser.toJSON();
 
       return safeUser;
     } catch (error) {
@@ -30,6 +29,19 @@ export class UserService {
       }
 
       throw Boom.internal('Error creating user');
+    }
+  };
+
+  findAll = async () => {
+    try {
+      const users = await this.userModel.findAll({
+        attributes: {
+          exclude: ['updatedAt', 'deletedAt', 'password'],
+        },
+      });
+      return users;
+    } catch {
+      throw Boom.internal('Error to obtain users');
     }
   };
 }

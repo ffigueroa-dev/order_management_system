@@ -20,3 +20,14 @@ userController.post(
     }
   },
 );
+userController.get(
+  '/',
+  async (req, res, next) => {
+    try {
+      const users = await userService.findAll();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
