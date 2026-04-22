@@ -20,14 +20,19 @@ userController.post(
     }
   },
 );
-userController.get(
-  '/',
-  async (req, res, next) => {
-    try {
-      const users = await userService.findAll();
-      res.json(users);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+userController.get('/', async (req, res, next) => {
+  try {
+    const users = await userService.findAll();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+userController.delete('/:id', async (req, res, next) => {
+  try {
+    const deletedUser = await userService.deleteUser(req.params.id);
+    res.json(deletedUser);
+  } catch (error) {
+    next(error);
+  }
+});
