@@ -15,4 +15,12 @@ export class ClientService {
       throw error;
     }
   };
+
+  findById = async (id) => {
+    const client = await Client.findByPk(id);
+    if (!client) {
+      throw Boom.notFound('Client not found');
+    }
+    return client;
+  };
 }
