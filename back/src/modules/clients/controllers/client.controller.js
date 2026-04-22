@@ -53,3 +53,11 @@ clientController.patch(
     }
   },
 );
+clientController.get('/', async (req, res, next) => {
+  try {
+    const clients = await clientService.findAll();
+    res.json(clients);
+  } catch (error) {
+    next(error);
+  }
+});

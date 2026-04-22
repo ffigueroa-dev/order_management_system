@@ -29,4 +29,9 @@ export class ClientService {
     await user.update(payload);
     return user;
   };
+  
+  findAll = async () => {
+    const clients = await Client.findAll();
+    return clients;
+  };
 }
