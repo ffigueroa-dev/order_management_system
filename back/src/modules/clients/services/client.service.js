@@ -2,8 +2,6 @@ import Boom from '@hapi/boom';
 import { Client } from '../models/client.model.js';
 
 export class ClientService {
-  // constructor()
-
   createClient = async (data) => {
     try {
       const createdClient = await Client.create(data);
@@ -33,5 +31,11 @@ export class ClientService {
   findAll = async () => {
     const clients = await Client.findAll();
     return clients;
+  };
+
+  deleteClient = async (id) => {
+    const client =  await this.findById(id);
+    await client.destroy();
+    return client;
   };
 }
