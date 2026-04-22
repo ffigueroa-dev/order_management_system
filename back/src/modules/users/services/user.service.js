@@ -20,28 +20,39 @@ export class UserService {
 
       return safeUser;
     } catch (error) {
-      if (error.isBoom) {
-        throw error;
-      }
-
       if (error.name === 'SequelizeUniqueConstraintError') {
         throw Boom.badRequest('Email already exists');
       }
 
-      throw Boom.internal('Error creating user');
+      throw error;
     }
   };
 
   findAll = async () => {
-    try {
-      const users = await this.userModel.findAll({
-        attributes: {
-          exclude: ['updatedAt', 'deletedAt', 'password'],
-        },
-      });
-      return users;
-    } catch {
-      throw Boom.internal('Error to obtain users');
+    const users = await this.userModel.findAll({
+      attributes: {
+        exclude: ['updatedAt', 'deletedAt', 'password'],
+      },
+    });
+
+    return users;
+  };
+
+  findById = async (id) => {
+    const user = await this.userModel.findOne({ where: { id } });
+
+    if (!user) {
+      throw Boom.notFound('user not found');
     }
+
+    return user;
+  };
+
+  deleteUser = async (id) => {
+    const user = await this.findById(id);
+    await user.destroy();
+
+    const { password, ...safeUser } = user.toJSON();
+    return safeUser;
   };
 }
