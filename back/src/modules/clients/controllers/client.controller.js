@@ -61,3 +61,16 @@ clientController.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
+clientController.delete(
+  '/:id',
+  validatorHandler(findClientSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const deletedClient = await clientService.deleteClient(req.params.id);
+      res.json(deletedClient);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
