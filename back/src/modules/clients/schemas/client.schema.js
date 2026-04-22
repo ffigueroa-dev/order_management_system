@@ -8,3 +8,9 @@ export const createClientSchema = z
     fullAddress: z.string().min(6),
   })
   .strict();
+
+export const findClientSchema = z
+  .object({
+    id: z.uuidv4(),
+  })
+  .strict();
