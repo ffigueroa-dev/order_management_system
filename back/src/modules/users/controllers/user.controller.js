@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UserService } from '../services/user.service.js';
 import { User } from '../models/user.model.js';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
-import { createUserSchema } from '../schemas/user.schema.js';
+import { createUserSchema, updateUserSchema } from '../schemas/user.schema.js';
 
 export const userController = Router();
 const userService = new UserService(User);
@@ -20,6 +20,7 @@ userController.post(
     }
   },
 );
+
 userController.get('/', async (req, res, next) => {
   try {
     const users = await userService.findAll();
@@ -28,6 +29,7 @@ userController.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
 userController.delete('/:id', async (req, res, next) => {
   try {
     const deletedUser = await userService.deleteUser(req.params.id);
@@ -36,3 +38,18 @@ userController.delete('/:id', async (req, res, next) => {
     next(error);
   }
 });
+
+userController.patch(
+  '/:id',
+  validatorHandler(updateUserSchema, 'body'),
+  async (req, res, next) => {
+    const payload =  req.body;
+    const id = req.params.id;
+    try {
+      const updatedUser = await userService.updateUser(id, payload);
+      res.json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  },
+);

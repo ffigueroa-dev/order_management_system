@@ -55,4 +55,21 @@ export class UserService {
     const { password, ...safeUser } = user.toJSON();
     return safeUser;
   };
+
+  updateUser = async (id, payload) => {
+    const user = await this.findById(id);
+    if (!user) {
+      throw Boom.notFound('user not found');
+    }
+    const data = { ...payload };
+
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    await user.update(data);
+
+    const { password, ...safeUser } = user.toJSON();
+    return safeUser;
+  };
 }
