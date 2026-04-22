@@ -14,3 +14,15 @@ export const findClientSchema = z
     id: z.uuidv4(),
   })
   .strict();
+
+export const updateClientSchema = z
+  .object({
+    firstName: z.string().min(1).optional(),
+    lastName: z.string().min(1).optional(),
+    email: z.string().email().optional(),
+    fullAddress: z.string().min(6).optional(),
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided',
+  });

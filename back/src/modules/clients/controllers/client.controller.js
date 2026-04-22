@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createClientSchema,
   findClientSchema,
+  updateClientSchema,
 } from '../schemas/client.schema.js';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
 import { ClientService } from '../services/client.service.js';
@@ -37,6 +38,21 @@ clientController.get(
   },
 );
 
+clientController.patch(
+  '/:id',
+  validatorHandler(findClientSchema, 'params'),
+  validatorHandler(updateClientSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const payload = req.body;
+      const updatedClient = await clientService.updateClient(id, payload);
+      res.json(updatedClient);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 clientController.get('/', async (req, res, next) => {
   try {
     const clients = await clientService.findAll();
