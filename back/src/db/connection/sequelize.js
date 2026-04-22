@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize';
 import envs from '../../envs/index.js';
-console.log(envs);
 
 export const sequelize = new Sequelize(
   envs.db_name,
