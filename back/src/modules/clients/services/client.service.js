@@ -23,4 +23,10 @@ export class ClientService {
     }
     return client;
   };
+
+  updateClient = async (id, payload) => {
+    const user = await this.findById(id);
+    await user.update(payload);
+    return user;
+  };
 }
