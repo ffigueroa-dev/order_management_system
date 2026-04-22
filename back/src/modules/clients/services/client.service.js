@@ -23,4 +23,9 @@ export class ClientService {
     }
     return client;
   };
+
+  findAll = async () => {
+    const clients =  await Client.findAll();
+    return clients;
+  };
 }
