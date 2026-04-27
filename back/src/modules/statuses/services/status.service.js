@@ -9,4 +9,9 @@ export class StatusService {
     const status = await this.statusModel.create(data);
     return status;
   };
+
+  findAll = async () => {
+    const statuses = await this.statusModel.findAll();
+    return statuses;
+  };
 }

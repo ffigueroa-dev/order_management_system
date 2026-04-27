@@ -19,3 +19,12 @@ statusController.post(
     }
   },
 );
+
+statusController.get('/', async (req, res, next) => {
+  try {
+    const statuses = await statusService.findAll();
+    res.json(statuses);
+  } catch (error) {
+    next(error);
+  }
+});
