@@ -24,8 +24,15 @@ export class StatusService {
     await status.update(payload);
     return status;
   };
+
   findAll = async () => {
     const statuses = await this.statusModel.findAll();
     return statuses;
+  };
+
+  deleteById = async (id) => {
+    const status = await this.findById(id);
+    await status.destroy();
+    return status;
   };
 }

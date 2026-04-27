@@ -48,3 +48,17 @@ statusController.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
+statusController.delete(
+  '/:id',
+  validatorHandler(findStatusSchema, 'params'),
+  async (req, res, next) => {
+    const id = req.params.id;
+    try {
+      const deletedStatus = await statusService.deleteById(id);
+      res.json(deletedStatus);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
