@@ -1,6 +1,7 @@
 import express from 'express';
 import { userController } from '../modules/users/controllers/user.controller.js';
 import { clientController } from '../modules/clients/controllers/client.controller.js';
+import { statusController } from '../modules/statuses/controllers/status.controller.js';
 
 export const routerApi =(app)=>{
   const router = express.Router();
@@ -8,5 +9,6 @@ export const routerApi =(app)=>{
 
   router.use('/users', userController);
   router.use('/clients', clientController);
+  router.use('/statuses', statusController);
 };
 
