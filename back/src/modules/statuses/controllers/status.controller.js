@@ -1,6 +1,10 @@
 import express from 'express';
 import { StatusService } from '../services/status.service.js';
-import { createStatusSchema, findStatusSchema, updateStatusSchema } from '../schemas/status.schema.js';
+import {
+  createStatusSchema,
+  findStatusSchema,
+  updateStatusSchema,
+} from '../schemas/status.schema.js';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
 
 export const statusController = express.Router();
@@ -20,18 +24,6 @@ statusController.post(
   },
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
 statusController.patch(
   '/:id',
   validatorHandler(findStatusSchema, 'params'),
@@ -47,3 +39,12 @@ statusController.patch(
     }
   },
 );
+
+statusController.get('/', async (req, res, next) => {
+  try {
+    const statuses = await statusService.findAll();
+    res.json(statuses);
+  } catch (error) {
+    next(error);
+  }
+});

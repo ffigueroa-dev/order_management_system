@@ -1,4 +1,4 @@
-import Boom  from '@hapi/boom';
+import Boom from '@hapi/boom';
 import { Status } from '../models/status.model.js';
 
 export class StatusService {
@@ -10,13 +10,6 @@ export class StatusService {
     const status = await this.statusModel.create(data);
     return status;
   };
-  
-  
-  
-  
-  
-  
-  
 
   findById = async (id) => {
     const status = await this.statusModel.findOne({ where: { id: id } });
@@ -30,5 +23,9 @@ export class StatusService {
     const status = await this.findById(id);
     await status.update(payload);
     return status;
+  };
+  findAll = async () => {
+    const statuses = await this.statusModel.findAll();
+    return statuses;
   };
 }
