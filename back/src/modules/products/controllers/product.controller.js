@@ -19,3 +19,12 @@ productController.post(
     }
   },
 );
+
+productController.get('/', async (req, res, next) => {
+  try {
+    const products = await productService.findAll();
+    res.json(products);
+  } catch (error) {
+    next(error);
+  }
+});
