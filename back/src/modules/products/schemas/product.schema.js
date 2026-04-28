@@ -12,3 +12,9 @@ export const createProductSchema = z
       }),
   })
   .strict();
+
+export const findProductSchema = z
+  .object({
+    id: z.uuidv4(),
+  })
+  .strict();
