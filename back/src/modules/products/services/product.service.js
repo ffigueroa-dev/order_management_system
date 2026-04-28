@@ -9,4 +9,9 @@ export class ProductService {
     const product = await this.model.create(data);
     return product;
   };
+
+  findAll = async () => {
+    const products = await this.model.findAll();
+    return products;
+  };
 }
