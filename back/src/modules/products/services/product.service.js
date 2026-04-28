@@ -24,4 +24,10 @@ export class ProductService {
     }
     return product;
   };
+
+  update = async (id, payload) => {
+    const product = await this.findById(id);
+    product.update(payload);
+    return product;
+  };
 }

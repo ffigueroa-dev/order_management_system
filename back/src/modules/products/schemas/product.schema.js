@@ -18,3 +18,17 @@ export const findProductSchema = z
     id: z.uuidv4(),
   })
   .strict();
+
+export const updateProductSchema = z
+  .object({
+    name: z.string().min(1).optional(),
+    description: z.string().min(1).optional(),
+    price: z
+      .number()
+      .positive()
+      
+      .refine((value) => Number(value.toFixed(2)) === value, {
+        message: 'Price must have at most 2 decimal places',
+      }).optional(),
+  })
+  .strict();
