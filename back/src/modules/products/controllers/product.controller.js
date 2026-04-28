@@ -4,6 +4,7 @@ import { validatorHandler } from '../../../middlewares/validatorHandler.js';
 import {
   createProductSchema,
   findProductSchema,
+  updateProductSchema,
 } from '../schemas/product.schema.js';
 
 export const productController = Router();
@@ -39,6 +40,22 @@ productController.get(
     const id = req.params.id;
     try {
       const product = await productService.findById(id);
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+productController.patch(
+  '/:id',
+  validatorHandler(findProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
+  async (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body;
+    try {
+      const product = await productService.update(id, data);
       res.json(product);
     } catch (error) {
       next(error);
