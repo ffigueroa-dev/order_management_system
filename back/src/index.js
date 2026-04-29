@@ -1,5 +1,5 @@
 import express from 'express';
-
+import './db/models/index.js';
 import envs from './envs/index.js';
 
 import { routerApi } from './controllers/index.js';
