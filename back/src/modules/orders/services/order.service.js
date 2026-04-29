@@ -16,19 +16,11 @@ export class OrderService {
     const transaction = await sequelize.transaction();
 
     try {
-      const dbProducts = await getProductsOrFail(
-        data.products,
-        transaction,
-      );
+      const dbProducts = await getProductsOrFail(data.products, transaction);
 
-      const productOrders =
-        buildProductOrders(
-          data.products,
-          dbProducts,
-        );
+      const productOrders = buildProductOrders(data.products, dbProducts);
 
-      const total =
-        calculateOrderTotal(productOrders);
+      const total = calculateOrderTotal(productOrders);
 
       const order = await this.model.create(
         {
@@ -43,11 +35,7 @@ export class OrderService {
         },
       );
 
-      await createProductOrders(
-        order.id,
-        productOrders,
-        transaction,
-      );
+      await createProductOrders(order.id, productOrders, transaction);
 
       await transaction.commit();
 
@@ -56,5 +44,16 @@ export class OrderService {
       await transaction.rollback();
       throw error;
     }
+  };
+
+  find = async () => {
+    const orders = await Order.findAll({
+      include: [
+        { association: 'client' },
+        { association: 'user' },
+        { association: 'status' },
+      ],
+    });
+    return orders;
   };
 }

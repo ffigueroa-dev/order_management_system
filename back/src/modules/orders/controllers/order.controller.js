@@ -11,7 +11,7 @@ orderController.post(
   validatorHandler(createOrderSchema, 'body'),
   async (req, res, next) => {
     const data = req.body;
-    
+
     try {
       const order = await orderService.create(data);
       res.json(order);
@@ -20,3 +20,12 @@ orderController.post(
     }
   },
 );
+
+orderController.get('/', async (req, res, next) => {
+  try {
+    const orders = await orderService.find();
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+});
