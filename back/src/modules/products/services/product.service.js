@@ -30,4 +30,10 @@ export class ProductService {
     product.update(payload);
     return product;
   };
+
+  delete = async (id) => {
+    const product = await this.findById(id);
+    await product.destroy();
+    return product;
+  };
 }

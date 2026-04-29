@@ -62,3 +62,17 @@ productController.patch(
     }
   },
 );
+
+productController.delete(
+  '/:id',
+  validatorHandler(findProductSchema, 'params'),
+  async (req, res, next) => {
+    const id = req.params.id;
+    try {
+      const deletedProduct = await productService.delete(id);
+      res.json(deletedProduct);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
