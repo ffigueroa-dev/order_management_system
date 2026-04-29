@@ -44,3 +44,10 @@ export const User = sequelize.define(
     paranoid: true,
   },
 );
+
+User.associate = (models) => {
+  User.hasMany(models.Order, {
+    foreignKey: 'userId',
+    as: 'orders',
+  });
+};
