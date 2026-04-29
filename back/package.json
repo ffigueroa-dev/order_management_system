@@ -18,7 +18,12 @@
     "db:undo:all": "sequelize-cli db:migrate:undo:all",
     "db:migration:create": "sequelize-cli migration:generate --name",
     "db:fresh": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
-    "generate": "node scripts/generateModule.js"
+    "generate": "node scripts/generateModule.js",
+    "seed:all": "sequelize-cli db:seed:all",
+    "seed:undo": "sequelize-cli db:seed:undo",
+    "seed:undo:all": "sequelize-cli db:seed:undo:all",
+    "seed:run": "sequelize-cli db:seed --seed",
+    "seed:create": "sequelize-cli seed:generate --name"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
