@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
-import { createOrderSchema } from '../schemas/order.schema.js';
+import { createOrderSchema, findOrderSchema } from '../schemas/order.schema.js';
 import { OrderService } from '../services/order.service.js';
 
 export const orderController = Router();
@@ -29,3 +29,17 @@ orderController.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
+orderController.get(
+  '/:id',
+  validatorHandler(findOrderSchema, 'params'),
+  async (req, res, next) => {
+    const id = req.params.id;
+    try {
+      const order = await orderService.findById(id);
+      res.json(order);
+    } catch (error) {
+      next(error);
+    }
+  },
+);

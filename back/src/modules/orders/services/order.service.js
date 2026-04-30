@@ -50,10 +50,27 @@ export class OrderService {
     const orders = await Order.findAll({
       include: [
         { association: 'client' },
-        { association: 'user' },
+        { association: 'user', attributes: { exclude: ['password'] } },
         { association: 'status' },
       ],
     });
     return orders;
+  };
+
+  findById = async (id) => {
+    const order = await Order.findByPk(id, {
+      include: [
+        { association: 'client' },
+        { association: 'user', attributes: { exclude: ['password'] } },
+        { association: 'status' },
+        {
+          association: 'products',
+          through: {
+            attributes: ['quantity', 'unitPrice', 'subtotal'],
+          },
+        },
+      ],
+    });
+    return order;
   };
 }
