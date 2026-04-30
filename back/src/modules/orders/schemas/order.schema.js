@@ -95,3 +95,27 @@ export const updateOrderStatusSchema = z
     }),
   })
   .strict();
+
+export const updateOrderSchema = z
+  .object({
+    clientId: z
+      .uuidv4({
+        message: 'clientId must be a valid uuid',
+      })
+      .optional(),
+
+    statusId: z
+      .uuidv4({
+        message: 'statusId must be a valid uuid',
+      })
+      .optional(),
+      
+    userId: z
+      .uuidv4({
+        message: 'userId must be a valid uuid',
+      })
+      .optional(),
+
+    notes: z.string().min(1, 'notes cannot be empty').optional(),
+  })
+  .strict();

@@ -110,4 +110,10 @@ export class OrderService {
     await order.update(payload);
     return await this.findById(orderId);
   };
+
+  updateOrder = async (orderId, payload) => {
+    const order = await this.findById(orderId);
+    await order.update(payload);
+    return await this.findById(orderId);
+  };
 }
