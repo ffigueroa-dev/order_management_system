@@ -46,3 +46,9 @@ export const createOrderSchema = z
       });
     }
   });
+
+export const findOrderSchema = z
+  .object({
+    id: z.uuidv4(),
+  })
+  .strict();
