@@ -52,3 +52,40 @@ export const findOrderSchema = z
     id: z.uuidv4(),
   })
   .strict();
+
+export const updateOrderProductsSchema = z
+  .object({
+    products: z
+      .array(
+        z
+          .object({
+            productId: z.uuidv4({
+              message: 'productId must be a valid uuid',
+            }),
+
+            quantity: z
+              .number()
+              .int('quantity must be an integer')
+              .positive('quantity must be greater than 0')
+              .max(999, 'quantity is too large'),
+          })
+          .strict(),
+      )
+      .min(1, 'order must contain at least one product'),
+  })
+  .strict()
+  .superRefine((data, ctx) => {
+    const productIds = data.products.map(
+      (product) => product.productId,
+    );
+
+    const uniqueProducts = new Set(productIds);
+
+    if (uniqueProducts.size !== productIds.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'duplicated products are not allowed',
+        path: ['products'],
+      });
+    }
+  });

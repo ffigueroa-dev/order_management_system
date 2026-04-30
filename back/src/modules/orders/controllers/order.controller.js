@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
-import { createOrderSchema, findOrderSchema } from '../schemas/order.schema.js';
+import {
+  createOrderSchema,
+  findOrderSchema,
+  updateOrderProductsSchema,
+} from '../schemas/order.schema.js';
 import { OrderService } from '../services/order.service.js';
 
 export const orderController = Router();
@@ -38,6 +42,22 @@ orderController.get(
     try {
       const order = await orderService.findById(id);
       res.json(order);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+orderController.patch(
+  '/:id/products',
+  validatorHandler(findOrderSchema, 'params'),
+  validatorHandler(updateOrderProductsSchema, 'body'),
+  async (req, res, next) => {
+    const products = req.body.products;
+    const orderId = req.params.id;
+    try {
+      const updatedOrder = await orderService.updateProducts(orderId, products);
+      res.json(updatedOrder);
     } catch (error) {
       next(error);
     }
