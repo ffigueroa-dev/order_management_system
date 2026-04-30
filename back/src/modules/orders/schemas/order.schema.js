@@ -75,9 +75,7 @@ export const updateOrderProductsSchema = z
   })
   .strict()
   .superRefine((data, ctx) => {
-    const productIds = data.products.map(
-      (product) => product.productId,
-    );
+    const productIds = data.products.map((product) => product.productId);
 
     const uniqueProducts = new Set(productIds);
 
@@ -89,3 +87,11 @@ export const updateOrderProductsSchema = z
       });
     }
   });
+
+export const updateOrderStatusSchema = z
+  .object({
+    statusId: z.uuidv4({
+      message: 'statusId must be a valid uuid',
+    }),
+  })
+  .strict();
