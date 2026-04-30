@@ -4,6 +4,7 @@ import {
   createOrderSchema,
   findOrderSchema,
   updateOrderProductsSchema,
+  updateOrderStatusSchema,
 } from '../schemas/order.schema.js';
 import { OrderService } from '../services/order.service.js';
 
@@ -57,6 +58,22 @@ orderController.patch(
     const orderId = req.params.id;
     try {
       const updatedOrder = await orderService.updateProducts(orderId, products);
+      res.json(updatedOrder);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+orderController.patch(
+  '/:id/status',
+  validatorHandler(findOrderSchema, 'params'),
+  validatorHandler(updateOrderStatusSchema, 'body'),
+  async (req, res, next) => {
+    const data = req.body;
+    const orderId = req.params.id;
+    try {
+      const updatedOrder = await orderService.updateStatus(orderId, data);
       res.json(updatedOrder);
     } catch (error) {
       next(error);
