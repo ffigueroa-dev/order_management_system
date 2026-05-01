@@ -97,3 +97,17 @@ orderController.patch(
     }
   },
 );
+
+orderController.delete(
+  '/:id',
+  validatorHandler(findOrderSchema, 'params'),
+  async (req, res, next) => {
+    const id = req.params.id;
+    try {
+      const deletedOrder = await orderService.deleteOrder(id);
+      res.json(deletedOrder);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
