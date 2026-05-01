@@ -116,4 +116,18 @@ export class OrderService {
     await order.update(payload);
     return await this.findById(orderId);
   };
+
+  deleteOrder = async (orderId)=>{
+    const transaction = await sequelize.transaction();
+    try {
+      const order = await this.findById(orderId);
+      await destroyProductOrder(orderId, transaction);
+      await order.destroy({transaction});
+      await transaction.commit();
+      return order;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  };
 }
