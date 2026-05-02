@@ -4,6 +4,7 @@ import { clientController } from '../modules/clients/controllers/client.controll
 import { statusController } from '../modules/statuses/controllers/status.controller.js';
 import { productController } from '../modules/products/controllers/product.controller.js';
 import { orderController } from '../modules/orders/controllers/order.controller.js';
+import { authController } from '../modules/auth/controllers/auth.controller.js';
 
 export const routerApi = (app) => {
   const router = express.Router();
@@ -14,4 +15,5 @@ export const routerApi = (app) => {
   router.use('/statuses', statusController);
   router.use('/products', productController);
   router.use('/orders', orderController);
+  router.use('/auth', authController);
 };

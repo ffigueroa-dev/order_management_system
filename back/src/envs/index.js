@@ -6,7 +6,8 @@ const envs = {
   db_user: process.env.DB_USER,
   db_host: process.env.DB_HOST,
   db_port: process.env.DB_PORT,
-  port: process.env.PORT
+  port: process.env.PORT,
+  jwt_secret: process.env.JWT_SECRET,
 };
 
 export default envs;
