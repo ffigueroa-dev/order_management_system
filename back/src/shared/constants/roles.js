@@ -1,3 +1,4 @@
-import { z } from 'zod';
-
-export const ROLES = z.enum(['owner', 'delivery']);
+export const ROLES = Object.freeze({
+  OWNER: 'owner',
+  DELIVERY: 'delivery',
+});

@@ -6,9 +6,18 @@ import {
   findProductSchema,
   updateProductSchema,
 } from '../schemas/product.schema.js';
+import { authMiddleware } from '../../auth/middlewares/auth.middleware.js';
+import { ROLES } from '../../../shared/constants/roles.js';
+import { allowRoles } from '../../auth/middlewares/roles.midleware.js';
 
 export const productController = Router();
 const productService = new ProductService();
+
+productController.use(authMiddleware);
+
+productController.use(
+  allowRoles(ROLES.OWNER),
+);
 
 productController.post(
   '/',

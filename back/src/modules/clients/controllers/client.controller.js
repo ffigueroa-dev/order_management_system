@@ -6,10 +6,19 @@ import {
 } from '../schemas/client.schema.js';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
 import { ClientService } from '../services/client.service.js';
+import { authMiddleware } from '../../auth/middlewares/auth.middleware.js';
+import { allowRoles } from '../../auth/middlewares/roles.midleware.js';
+import { ROLES } from '../../../shared/constants/roles.js';
 
 export const clientController = express.Router();
 
 const clientService = new ClientService();
+
+clientController.use(authMiddleware);
+
+clientController.use(
+  allowRoles(ROLES.OWNER),
+);
 
 clientController.post(
   '/',
