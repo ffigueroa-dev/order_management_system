@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ROLES } from '../../../shared/constants/roles.js';
 
 export const createUserSchema = z
   .object({
@@ -6,7 +7,7 @@ export const createUserSchema = z
     lastName: z.string().min(1),
     email: z.string().email(),
     password: z.string().min(6),
-    type: z.enum(['owner', 'delivery']),
+    type: ROLES,
   })
   .strict();
 
