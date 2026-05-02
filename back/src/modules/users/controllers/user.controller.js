@@ -3,9 +3,20 @@ import { UserService } from '../services/user.service.js';
 import { User } from '../models/user.model.js';
 import { validatorHandler } from '../../../middlewares/validatorHandler.js';
 import { createUserSchema, updateUserSchema } from '../schemas/user.schema.js';
+import { authMiddleware } from '../../auth/middlewares/auth.middleware.js';
+import { allowRoles } from '../../auth/middlewares/roles.midleware.js';
+import { ROLES } from '../../../shared/constants/roles.js';
 
 export const userController = Router();
 const userService = new UserService(User);
+
+
+userController.use(authMiddleware);
+
+userController.use(
+  allowRoles(ROLES.OWNER),
+);
+
 
 userController.post(
   '/',
