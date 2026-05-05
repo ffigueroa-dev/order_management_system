@@ -1,16 +1,19 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useAuthStore } from '../store/auth.store';
+import { loginSchema } from '../schemas/auth.schema';
+import { login } from '../api/login';
 
 import { Form } from '@/components/forms/Form';
 import { Input } from '@/components/forms/Input';
 import { InputError } from '@/components/forms/InputError';
 import { InputLabel } from '@/components/forms/InputLabel';
 import { Button } from '@/components/ui/Button';
-import { loginSchema } from '../schemas/auth.schema';
-
-
 
 export const LoginPage = () => {
+  const authLogin = useAuthStore((state) => state.login);
   const {
     register,
     handleSubmit,
@@ -18,9 +21,23 @@ export const LoginPage = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
+  const [formError, setFormError] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      setFormError(false);
+
+      const res = await login(data);
+
+      authLogin({
+        user: res.user,
+        token: res.token,
+      });
+    } catch (error) {
+      console.error(error);
+
+      setFormError(true);
+    }
   };
 
   return (
@@ -55,7 +72,11 @@ export const LoginPage = () => {
             <InputError>{errors.password.message}</InputError>
           )}
         </div>
-
+        {formError && (
+          <InputError>
+            Incorrect email or password. Please try again later
+          </InputError>
+        )}
         <Button type="submit">Sign in</Button>
       </Form>
     </>
