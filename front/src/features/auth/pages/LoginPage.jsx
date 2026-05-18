@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router';
 
 import { useAuthStore } from '../store/auth.store';
 import { loginSchema } from '../schemas/auth.schema';
@@ -13,6 +14,7 @@ import { InputLabel } from '@/components/forms/InputLabel';
 import { Button } from '@/components/ui/Button';
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const authLogin = useAuthStore((state) => state.login);
   const {
     register,
@@ -33,6 +35,7 @@ export const LoginPage = () => {
         user: res.user,
         token: res.token,
       });
+      navigate('/');
     } catch (error) {
       console.error(error);
 

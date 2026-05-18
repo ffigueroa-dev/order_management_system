@@ -1,16 +1,37 @@
 import { createBrowserRouter } from 'react-router';
 
 import { AuthLayout } from '@/layouts/AuthLayout';
+import { DashboardLayout } from '@/layouts/DashboardLayout';
 
 import { LoginPage } from '@/features/auth/pages/LoginPage';
+
+import { OrdersPage } from '@/features/orders/pages/OrdersPage';
+
+import { ProtectedRoute } from './ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
+
     children: [
       {
         path: '/login',
         element: <LoginPage />,
+      },
+    ],
+  },
+
+  {
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+
+    children: [
+      {
+        path: '/',
+        element: <OrdersPage />,
       },
     ],
   },
