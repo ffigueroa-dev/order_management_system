@@ -8,6 +8,7 @@ import { LoginPage } from '@/features/auth/pages/LoginPage';
 import { OrdersPage } from '@/features/orders/pages/OrdersPage';
 
 import { ProtectedRoute } from './ProtectedRoute';
+import { OrderDetailPage } from '@/features/orders/pages/OrderDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
         path: '/',
         element: <OrdersPage />,
       },
+      {
+        path: '/orders/:id',
+        element: <OrderDetailPage/>
+      }
     ],
   },
 ]);

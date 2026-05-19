@@ -1,5 +1,4 @@
-import { cn } from "@/utils/cn";
-
+import { cn } from '@/utils/cn';
 
 export const Button = ({
   children,
@@ -9,14 +8,11 @@ export const Button = ({
   ...props
 }) => {
   const variants = {
-    primary:
-      'bg-black text-white hover:bg-neutral-800',
+    primary: 'bg-black text-white hover:bg-neutral-800',
 
-    secondary:
-      'bg-neutral-100 text-black hover:bg-neutral-200',
+    secondary: 'bg-neutral-100 text-black hover:bg-neutral-200',
 
-    danger:
-      'bg-red-500 text-white hover:bg-red-600',
+    danger: 'bg-red-500 text-white hover:bg-red-600',
   };
 
   return (
@@ -27,7 +23,7 @@ export const Button = ({
         'disabled:pointer-events-none disabled:opacity-50',
         'focus:outline-none focus:ring-2 focus:ring-black/20',
         variants[variant],
-        className
+        className,
       )}
       {...props}
     >
