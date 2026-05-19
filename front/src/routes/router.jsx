@@ -9,6 +9,7 @@ import { OrdersPage } from '@/features/orders/pages/OrdersPage';
 
 import { ProtectedRoute } from './ProtectedRoute';
 import { OrderDetailPage } from '@/features/orders/pages/OrderDetailPage';
+import { UsersPage } from '@/features/users/pages/UsersPage';
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: '/orders/:id',
         element: <OrderDetailPage/>
+      },
+      {
+        path: '/users',
+        element: <UsersPage />
       }
     ],
   },
