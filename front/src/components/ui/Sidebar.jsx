@@ -1,4 +1,4 @@
-import { ShoppingCart, Users } from 'lucide-react';
+import { Package, ShoppingCart, Users } from 'lucide-react';
 
 import { SidebarOption } from './SidebarOption';
 
@@ -25,6 +25,11 @@ export const Sidebar = ({
           name='Users'
           path='/users'
           icon={Users}
+        />
+        <SidebarOption
+          name='Products'
+          path='/products'
+          icon={Package}
         />
       </nav>
     </aside>
