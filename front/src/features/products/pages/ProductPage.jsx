@@ -20,8 +20,24 @@ import { formatCurrency } from '@/utils/formatCurrency';
 
 import { ProductHeader } from '../components/ProductHeader';
 import { deleteProduct } from '../api/deleteProduct';
+import { UpdateProductModal } from '../components/UpdateProductModal';
+import { updateProduct } from '../api/updateProduct';
 
 export const ProductPage = () => {
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  const openUpdateModal = () => {
+    setIsUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const onUpdateProduct = async (values) => {
+    const updatedProduct = await updateProduct(id, values);
+    setProduct(updatedProduct);
+  };
   const [product, setProduct] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +50,7 @@ export const ProductPage = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const onEdit = () => {};
+  const onEdit = openUpdateModal;
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
@@ -164,6 +180,12 @@ export const ProductPage = () => {
         onClose={closeDeleteModal}
         onConfirm={onDeleteConfirm}
         isLoading={isDeleting}
+      />
+      <UpdateProductModal
+        product={product}
+        isOpen={isUpdateModalOpen}
+        onClose={closeUpdateModal}
+        onSubmitProduct={onUpdateProduct}
       />
     </>
   );
