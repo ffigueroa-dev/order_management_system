@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { ProductItem } from '../components/ProductItem';
 import { getProducts } from '../api/getProducts';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { Button } from '@/components/ui/Button';
+import { Plus } from 'lucide-react';
 
 export const ProductsPage = () => {
   const [products, setProducts] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
@@ -44,8 +48,21 @@ export const ProductsPage = () => {
   }
 
   return (
-    <div className="p-6 flex flex-wrap gap-4">
-      {products && products.map((p) => <ProductItem product={p} key={p.id} />)}
-    </div>
+    <>
+      <PageHeader
+        title="Products"
+        description="Manage your products"
+        actions={
+          <Button onClick={() => navigate('/products/create')}>
+            <Plus size={18} />
+            Create Product
+          </Button>
+        }
+      />
+      <div className="p-6 flex flex-wrap gap-4">
+        {products &&
+          products.map((p) => <ProductItem product={p} key={p.id} />)}
+      </div>
+    </>
   );
 };
