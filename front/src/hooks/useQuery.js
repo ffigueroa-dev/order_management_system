@@ -34,5 +34,6 @@ export const useQuery = ({ entity, queryFn }) => {
     isLoading,
     error,
     refetch: fetchData,
+    setData
   };
 };
