@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import { getProduct } from '../api/getProduct';
+
+import { DeleteProductModal } from '../components/DeleteProductModal';
 
 import { Button } from '@/components/ui/Button';
 
@@ -11,9 +13,13 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/Card';
+
 import { formatDate } from '@/utils/formatDate';
+
 import { formatCurrency } from '@/utils/formatCurrency';
+
 import { ProductHeader } from '../components/ProductHeader';
+import { deleteProduct } from '../api/deleteProduct';
 
 export const ProductPage = () => {
   const [product, setProduct] = useState(null);
@@ -22,11 +28,36 @@ export const ProductPage = () => {
 
   const [error, setError] = useState(null);
 
-  const { id } = useParams();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const { id } = useParams();
+  const navigate = useNavigate();
   const onEdit = () => {};
 
-  const onDelete = () => {};
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const onDeleteConfirm = async () => {
+    try {
+      setIsDeleting(true);
+
+      await deleteProduct(id);
+      navigate('/products');
+
+      closeDeleteModal();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -74,75 +105,66 @@ export const ProductPage = () => {
   }
 
   return (
-    <section className="flex flex-col w-full items-center justify-center p-6">
-      <ProductHeader product={product}/>
-      <Card className="w-full max-w-2xl">
-        <CardHeader className="space-y-2">
-          <h1 className="truncate text-3xl font-bold text-zinc-900">
-            {product.name}
-          </h1>
+    <>
+      <section className="flex w-full flex-col items-center justify-center p-6">
+        <ProductHeader product={product} />
 
-          <p className="break-words text-zinc-600">
-            {product.description}
-          </p>
-        </CardHeader>
+        <Card className="w-full max-w-2xl">
+          <CardHeader className="space-y-2">
+            <h1 className="truncate text-3xl font-bold text-zinc-900">
+              {product.name}
+            </h1>
 
-        <CardContent className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <span className="text-sm text-zinc-500">
-              Price
-            </span>
+            <p className="break-words text-zinc-600">{product.description}</p>
+          </CardHeader>
 
-            <span className="text-4xl font-bold text-zinc-900">
-              {formatCurrency(product.price)}
-            </span>
-          </div>
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-sm text-zinc-500">Price</span>
 
-          <div className="grid gap-4 text-sm text-zinc-500 sm:grid-cols-2">
-            <div className="flex flex-col gap-1">
-              <span className="font-medium text-zinc-700">
-                Created At
-              </span>
-
-              <span>
-                {formatDate(
-                  product.createdAt,
-                )}
+              <span className="text-4xl font-bold text-zinc-900">
+                {formatCurrency(product.price)}
               </span>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <span className="font-medium text-zinc-700">
-                Updated At
-              </span>
+            <div className="grid gap-4 text-sm text-zinc-500 sm:grid-cols-2">
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-zinc-700">Created At</span>
 
-              <span>
-                { formatDate(
-                  product.updatedAt,
-                )}
-              </span>
+                <span>{formatDate(product.createdAt)}</span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-zinc-700">Updated At</span>
+
+                <span>{formatDate(product.updatedAt)}</span>
+              </div>
             </div>
-          </div>
-        </CardContent>
+          </CardContent>
 
-        <CardFooter className="flex flex-col gap-3 sm:flex-row">
-          <Button
-            variant="primary"
-            className="w-full"
-            onClick={onEdit}
-          >
-            Edit Product
-          </Button>
+          <CardFooter className="flex flex-col gap-3 sm:flex-row">
+            <Button variant="primary" className="w-full" onClick={onEdit}>
+              Edit Product
+            </Button>
 
-          <Button
-            variant="danger"
-            className="w-full"
-            onClick={onDelete}
-          >
-            Delete Product
-          </Button>
-        </CardFooter>
-      </Card>
-    </section>
+            <Button
+              variant="danger"
+              className="w-full"
+              onClick={openDeleteModal}
+            >
+              Delete Product
+            </Button>
+          </CardFooter>
+        </Card>
+      </section>
+
+      <DeleteProductModal
+        product={product}
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onConfirm={onDeleteConfirm}
+        isLoading={isDeleting}
+      />
+    </>
   );
 };
