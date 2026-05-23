@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
 } from '@/components/ui/Card';
 import { formatDate } from '@/utils/formatDate';
 import { Button } from '@/components/ui/Button';
