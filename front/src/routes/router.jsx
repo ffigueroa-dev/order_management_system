@@ -14,6 +14,7 @@ import { ProductsPage } from '@/features/products/pages/ProductsPage';
 import { ProductPage } from '@/features/products/pages/ProductPage';
 import { CreateProductPage } from '@/features/products/pages/CreateProductPage';
 import { ClientsPage } from '@/features/clients/pages/ClientsPage';
+import { ClientPage } from '@/features/clients/pages/ClientPage';
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: '/clients',
         element: <ClientsPage />,
+      },
+      {
+        path: '/clients/:id',
+        element: <ClientPage />,
       },
     ],
   },
