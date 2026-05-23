@@ -12,6 +12,7 @@ import { OrderDetailPage } from '@/features/orders/pages/OrderDetailPage';
 import { UsersPage } from '@/features/users/pages/UsersPage';
 import { ProductsPage } from '@/features/products/pages/ProductsPage';
 import { ProductPage } from '@/features/products/pages/ProductPage';
+import { CreateProductPage } from '@/features/products/pages/CreateProductPage';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: '/products',
         element: <ProductsPage />,
+      },
+      {
+        path: '/products/create',
+        element: <CreateProductPage />,
       },
       {
         path: '/products/:id',
