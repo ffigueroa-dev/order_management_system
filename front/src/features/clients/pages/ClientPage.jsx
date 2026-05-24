@@ -1,6 +1,6 @@
 import { PageDetailsHeader } from '@/components/layout/PageDetailsHeader';
 import { useQuery } from '@/hooks/useQuery';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { getClient } from '../api/getCLient';
 import { Card, CardContent, CardFooter } from '@/components/ui/Card';
 import { formatDate } from '@/utils/formatDate';
@@ -8,10 +8,14 @@ import { Button } from '@/components/ui/Button';
 import { updateClient } from '../api/updateClient';
 import { useState } from 'react';
 import { UpdateClientModal } from '../components/UpdateClientModal';
+import { DeleteClientModal } from '../components/DeleteClientModal';
+import { deleteClient } from '../api/deleteClient';
 
 export const ClientPage = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
   const openUpdateModal = () => {
     setIsUpdateModalOpen(true);
   };
@@ -21,8 +25,6 @@ export const ClientPage = () => {
   };
 
   const onUpdateClient = async (values) => {
-    console.log(values);
-    alert('aaaaaaaaj');
     const updatedClient = await updateClient(id, values);
     setClient(updatedClient);
   };
@@ -32,10 +34,32 @@ export const ClientPage = () => {
     error,
     data: client,
     isLoading,
-    setData: setClient
+    setData: setClient,
   } = useQuery({ entity: 'CLient', queryFn: () => getClient(id) });
   const onEdit = openUpdateModal;
-  const openDeleteModal = () => {};
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const onDeleteConfirm = async () => {
+    try {
+      setIsDeleting(true);
+
+      await deleteClient(id);
+      navigate('/clients');
+
+      closeDeleteModal();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -103,7 +127,19 @@ export const ClientPage = () => {
           </CardFooter>
         </Card>
       </section>
-      <UpdateClientModal client={client} isOpen={isUpdateModalOpen} onClose={closeUpdateModal} onSubmitClient={onUpdateClient}/>
+      <UpdateClientModal
+        client={client}
+        isOpen={isUpdateModalOpen}
+        onClose={closeUpdateModal}
+        onSubmitClient={onUpdateClient}
+      />
+      <DeleteClientModal
+        client={client}
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onConfirm={onDeleteConfirm}
+        isLoading={isDeleting}
+      />
     </div>
   );
 };
