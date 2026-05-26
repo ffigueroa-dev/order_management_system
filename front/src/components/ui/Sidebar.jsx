@@ -1,4 +1,4 @@
-import { Contact, Package, ShoppingCart, Users } from 'lucide-react';
+import { CircleCheckBig, Contact, Package, ShoppingCart, Users } from 'lucide-react';
 
 import { SidebarOption } from './SidebarOption';
 
@@ -35,6 +35,11 @@ export const Sidebar = ({
           name='Clients'
           path='/clients'
           icon={Contact}
+        />
+        <SidebarOption
+          name='Statuses'
+          path='/statuses'
+          icon={CircleCheckBig}
         />
       </nav>
     </aside>
