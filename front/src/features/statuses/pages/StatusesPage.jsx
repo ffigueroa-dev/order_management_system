@@ -17,6 +17,7 @@ export const StatusesPage = () => {
   });
 
   const createModal = useModal();
+  
   const onCreateProduct = async (data) => {
     await createStatus(data);
     refetch();
@@ -42,7 +43,7 @@ export const StatusesPage = () => {
       />
       <div className="flex gap-4 p-6 flex-wrap">
         {data.map((s) => (
-          <StatusItem key={s.id} status={s} />
+          <StatusItem key={s.id} status={s} refetch={refetch}/>
         ))}
       </div>
       <CreateStatusModal
