@@ -1,23 +1,31 @@
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
-import { Trash2 } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
 
 import { Link } from 'react-router';
 import { useModal } from '@/hooks/useModal';
 import { DeleteStatusModal } from './DeleteStatusModal';
 import { useState } from 'react';
 import { deleteStatus } from '../api/deleteStatus';
+import { UpdateStatusModal } from './UpdateStatusModal';
+import { updateStatus } from '../api/updateStatus';
 
 export const StatusItem = ({ status, refetch }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const deleteModal = useModal();
+  const updateModal = useModal();
 
   const openDeleteModal = (e) => {
     e.preventDefault();
     e.stopPropagation();
     deleteModal.open();
+  };
+  const openUpdateModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    updateModal.open();
   };
 
   const onDeleteConfirm = async () => {
@@ -33,6 +41,11 @@ export const StatusItem = ({ status, refetch }) => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const onUpdateStatus = async (data) => {
+    await updateStatus(status.id, data);
+    refetch();
   };
 
   return (
@@ -67,10 +80,18 @@ export const StatusItem = ({ status, refetch }) => {
                 />
               </div>
             </div>
-            <div>
+            <div className="flex w-full gap-2 pt-2">
               <Button
                 variant="secondary"
-                className="h-9 w-9 p-0"
+                className="flex-1"
+                onClick={openUpdateModal}
+              >
+                <Edit2 size={16} />
+              </Button>
+
+              <Button
+                variant="danger"
+                className="flex-1"
                 onClick={openDeleteModal}
               >
                 <Trash2 size={16} />
@@ -85,6 +106,12 @@ export const StatusItem = ({ status, refetch }) => {
         onConfirm={onDeleteConfirm}
         status={status}
         isLoading={isDeleting}
+      />
+      <UpdateStatusModal
+        isOpen={updateModal.isOpen}
+        onClose={updateModal.close}
+        status={status}
+        onUpdateStatus={onUpdateStatus}
       />
     </>
   );
