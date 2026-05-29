@@ -18,6 +18,7 @@ import { ClientPage } from '@/features/clients/pages/ClientPage';
 import { CreateClientPage } from '@/features/clients/pages/CreateClientPage';
 import { StatusesPage } from '@/features/statuses/pages/StatusesPage';
 import { CreateUserPage } from '@/features/users/pages/CreateUserPage';
+import { UserPage } from '@/features/users/pages/UserPage';
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: '/users/create',
         element: <CreateUserPage />,
+      },
+      {
+        path: '/users/:id',
+        element: <UserPage />,
       },
       {
         path: '/products',

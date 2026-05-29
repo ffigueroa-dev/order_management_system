@@ -40,6 +40,14 @@ userController.get('/', async (req, res, next) => {
     next(error);
   }
 });
+userController.get('/:id', async (req, res, next) => {
+  try {
+    const user = await userService.findById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
 
 userController.delete('/:id', async (req, res, next) => {
   try {
