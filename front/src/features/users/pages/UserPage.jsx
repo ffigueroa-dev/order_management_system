@@ -1,23 +1,45 @@
 import { PageDetailsHeader } from '@/components/layout/PageDetailsHeader';
 import { useQuery } from '@/hooks/useQuery';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Card, CardContent, CardFooter } from '@/components/ui/Card';
 import { formatDate } from '@/utils/formatDate';
 import { Button } from '@/components/ui/Button';
 import { getUser } from '../api/getUser';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { Spinner } from '@/components/ui/Spinner';
+import { useModal } from '@/hooks/useModal';
+import { DeleteUserModal } from '../components/DeleteUserModal';
+import { deleteUser } from '../api/deleteUser';
+import { useState } from 'react';
 
 export const UserPage = () => {
   const { id } = useParams();
-  
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const navigate = useNavigate();
+
+  const deleteModal = useModal();
   const {
     error,
     data: user,
     isLoading,
     setData: setUser,
   } = useQuery({ entity: 'User', queryFn: () => getUser(id) });
-  
+
+  const onDeleteUser = async () => {
+    try {
+      setIsDeleting(true);
+
+      await deleteUser(user.id);
+      deleteModal.close();
+      navigate('/users');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -63,12 +85,19 @@ export const UserPage = () => {
               Edit User
             </Button>
 
-            <Button variant="danger" className="w-full" onClick={() => {}}>
+            <Button variant="danger" className="w-full" onClick={deleteModal.open}>
               Delete User
             </Button>
           </CardFooter>
         </Card>
       </section>
+      <DeleteUserModal
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        user={user}
+        isLoading={isDeleting}
+        onConfirm={onDeleteUser}
+      />
     </div>
   );
 };
