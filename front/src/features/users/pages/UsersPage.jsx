@@ -1,55 +1,45 @@
-import { useEffect, useState } from 'react';
 import { getUsers } from '../api/getUsers';
 import { UserCard } from '../components/UserCard';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { Button } from '@/components/ui/Button';
+import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { useQuery } from '@/hooks/useQuery';
+import { Spinner } from '@/components/ui/Spinner';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
 
 export const UsersPage = () => {
-  const [users, setUsers] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setIsLoading(true);
-
-        const data = await getUsers();
-
-        setUsers(data);
-      } catch (err) {
-        setError(
-          err.response?.data?.message ||
-            'An error occurred while fetching users',
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  const {
+    data: users,
+    error,
+    isLoading,
+  } = useQuery({ entity: 'Users', queryFn: getUsers });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (error) {
-    return (
-      <div className="p-6">
-        <div className="max-w-md border border-red-200 bg-red-50 rounded-2xl p-4">
-          <h2 className="text-red-600 font-semibold mb-1">
-            Failed to load users
-          </h2>
-
-          <p className="text-red-500 text-sm">{error}</p>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message={error} title="Failed to load users" />;
   }
-  console.log(users);
 
   return (
-    <div className="p-6 flex flex-wrap gap-4">
-      {users && users.map((u) => <UserCard key={u.id} user={u} />)}
-    </div>
+    <>
+      <PageHeader
+        title="Users"
+        description="Manage your users"
+        actions={
+          <Button onClick={() => navigate('/users/create')}>
+            <Plus size={18} />
+            Create User
+          </Button>
+        }
+      />
+      <div className="p-6 flex flex-wrap gap-4">
+        {users && users.map((u) => <UserCard key={u.id} user={u} />)}
+      </div>
+    </>
   );
 };
