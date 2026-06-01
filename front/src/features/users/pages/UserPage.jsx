@@ -11,6 +11,8 @@ import { useModal } from '@/hooks/useModal';
 import { DeleteUserModal } from '../components/DeleteUserModal';
 import { deleteUser } from '../api/deleteUser';
 import { useState } from 'react';
+import { updateUser } from '../api/updateUser';
+import { UpdateUserModal } from '../components/UpdateUserModal';
 
 export const UserPage = () => {
   const { id } = useParams();
@@ -19,6 +21,7 @@ export const UserPage = () => {
   const navigate = useNavigate();
 
   const deleteModal = useModal();
+  const updateModal = useModal();
   const {
     error,
     data: user,
@@ -38,6 +41,11 @@ export const UserPage = () => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const onUpdateUser = async (values) => {
+    const updatedUser = await updateUser(id, values);
+    setUser(updatedUser);
   };
 
   if (isLoading) {
@@ -81,11 +89,19 @@ export const UserPage = () => {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-3 sm:flex-row">
-            <Button variant="primary" className="w-full" onClick={() => {}}>
+            <Button
+              variant="primary"
+              className="w-full"
+              onClick={updateModal.open}
+            >
               Edit User
             </Button>
 
-            <Button variant="danger" className="w-full" onClick={deleteModal.open}>
+            <Button
+              variant="danger"
+              className="w-full"
+              onClick={deleteModal.open}
+            >
               Delete User
             </Button>
           </CardFooter>
@@ -97,6 +113,12 @@ export const UserPage = () => {
         user={user}
         isLoading={isDeleting}
         onConfirm={onDeleteUser}
+      />
+      <UpdateUserModal
+        isOpen={updateModal.isOpen}
+        onClose={updateModal.close}
+        onSubmitUser={onUpdateUser}
+        user={user}
       />
     </div>
   );
